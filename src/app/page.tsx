@@ -20,10 +20,10 @@ export default function Home() {
         </b>
       </div>
       <div className="my-12">
-        <Button label="여행 시작하기" onClick={handleAddTripPageClick} active={true} />
+        <Button label="여행 시작하기" onClick={handleAddTripPageClick} />
       </div>
       <div className="my-0">
-        <Button label="여행 기록보기" onClick={handleShowTripListPageClick} active={true} />
+        <Button label="여행 기록보기" onClick={handleShowTripListPageClick}  />
       </div>
 
     </div>
