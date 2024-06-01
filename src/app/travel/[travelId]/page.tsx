@@ -10,7 +10,7 @@ const TravelPage = () => {
   const router = useRouter();
   const [activeButton, setActiveButton] = useState('list');
 
-  const handleButtonClick = (buttonId) => {
+  const handleButtonClick = (buttonId: string) => {
     setActiveButton(buttonId);
   };
   function handleAddScript(){
