@@ -19,6 +19,9 @@ const AddTrip = () => {
       router.push("/v1/showTripList")
       // todo : db 저장 처리하기 
     };
+    const handleAddTrip = () => {
+       
+    };
   
     return (
         <div className="flex flex-col gap-6 w-full items-center justify-start h-auto mx-auto">
@@ -47,7 +50,7 @@ const AddTrip = () => {
               onChange={setTripCompanion}
           />
 
-      <Button label="여행 추가하기" />
+        <Button label="여행 추가하기" onClick={handleAddTrip} />
     </form>
     </div>
   );
