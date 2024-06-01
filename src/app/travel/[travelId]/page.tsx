@@ -44,10 +44,14 @@ const TravelPage = () => {
 
       {activeButton === 'grid' && (
         <div className="flex flex-col items-center justify-start gap-[30px] leading-[normal] tracking-[normal]">
+        <div className="flex grid grid-cols-3 gap-4">
           <MemoBlock id="1" memoText="Memo 1" image="https://cdn.pixabay.com/photo/2021/09/28/13/14/cat-6664412_1280.jpg" />
           <MemoBlock id="2" memoText="Memo 2" image="https://cdn.pixabay.com/photo/2014/04/13/20/49/cat-323262_1280.jpg" />
           <MemoBlock id="3" memoText="Memo 3" image="https://cdn.pixabay.com/photo/2017/11/09/21/41/cat-2934720_1280.jpg" />
-          <Button label="메모 선택" onClick={handleMemoSelect}/>
+          <MemoBlock id="3" memoText="Memo 3" image="https://cdn.pixabay.com/photo/2017/11/09/21/41/cat-2934720_1280.jpg" />
+          <MemoBlock id="3" memoText="Memo 3" image="https://cdn.pixabay.com/photo/2017/11/09/21/41/cat-2934720_1280.jpg" />
+        </div>
+        <Button label="메모 선택" onClick={handleMemoSelect}/>
         </div>
       )}
       {activeButton === 'list' && (

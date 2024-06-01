@@ -15,9 +15,9 @@ const MemoBlock: FC<MemoBlockProps> = ({ id, memoText, image }) => {
     router.push(`/memos/${id}`);
   };
   return (
-    <div onClick={handleClick} className="w-full sm:w-80 h-100 bg-slate-100 rounded-3xl text-neutral-300 p-4 flex flex-col items-start justify-center gap-3 hover:shadow-2xl hover:shadow-slate-400 transition-shadow">
-      <div className="w-full sm:w-72 h-60 bg-slate-300 rounded-2xl overflow-hidden">
-        <img src={image} alt="Memo thumbnail" className="w-full h-full object-cover" />
+    <div onClick={handleClick} className="w-full h-50 bg-slate-100 rounded-3xl text-neutral-300 p-4 flex flex-col items-start justify-center gap-3 hover:shadow-2xl hover:shadow-slate-400 transition-shadow">
+      <div className="w-full h-20 bg-slate-300 rounded-2xl overflow-hidden">
+        <img src={image} alt="Memo thumbnail" className="w-full h-20 object-cover" />
       </div>
       <div>
         <p className="font-extrabold">Card title</p>
