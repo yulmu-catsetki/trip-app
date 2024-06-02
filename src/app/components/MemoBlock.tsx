@@ -20,7 +20,7 @@ const MemoBlock: FC<MemoBlockProps> = ({ id, memoText, image }) => {
         <img src={image} alt="Memo thumbnail" className="w-full h-20 object-cover" />
       </div>
       <div>
-        <p className="font-extrabold">Card title</p>
+        <p className="font-bold">Card title</p>
         <p>{memoText}</p>
       </div>
     </div>
