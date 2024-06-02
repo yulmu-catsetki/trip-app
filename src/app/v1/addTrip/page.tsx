@@ -36,7 +36,10 @@ const AddTrip = () => {
   }, [tripName, startDate, endDate, tripLocation, tripCompanion]);
     return (
         <div className="flex flex-col w-full items-center justify-start h-auto mx-auto">
+            
+
             <Title text="여행 시작하기" />
+   
             <div className="flex flex-col items-center justify-start gap-[30px] leading-[normal] tracking-[normal]">
             <div className="w-full bg-gray-200 rounded-full h-2.5 mb-4 overflow-hidden">
                 <div className="bg-emerald-500 h-2.5 rounded-full transition-all duration-500" style={{ width: `${progress}%` }}></div>
