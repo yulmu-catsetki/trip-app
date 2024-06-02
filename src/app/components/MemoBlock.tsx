@@ -1,30 +1,55 @@
-"use client"
 import { FC } from 'react';
 import { useRouter } from 'next/navigation';
+import { useState } from 'react';
 
 type MemoBlockProps = {
     id: string;
     memoText: string;
     image: string;
+    showCheckbox: boolean;
 };
 
-const MemoBlock: FC<MemoBlockProps> = ({ id, memoText, image }) => {
+const MemoBlock: FC<MemoBlockProps> = ({ id, memoText, image, showCheckbox }) => {
   const router = useRouter();
+  const [selectedMemos, setSelectedMemos] = useState<string[]>([]);
 
   const handleClick = () => {
     router.push(`/memos/${id}`);
   };
+
   return (
-    <div onClick={handleClick} className="w-full h-50 bg-slate-100 rounded-3xl text-neutral-300 p-4 flex flex-col items-start justify-center gap-3 hover:shadow-2xl hover:shadow-slate-400 transition-shadow">
-      <div className="w-full h-20 bg-slate-300 rounded-2xl overflow-hidden">
-        <img src={image} alt="Memo thumbnail" className="w-full h-20 object-cover" />
+    <div className={`w-full h-64 flex flex-col justify-between dark:bg-gray-800 bg-white dark:border-gray-700 rounded-lg border border-gray-400 mb-6 py-5 px-4 relative ${showCheckbox && !selectedMemos.includes(id) ? 'opacity-50' : ''}`}>
+      {showCheckbox && (
+        <input
+          type="checkbox"
+          className="absolute top-2 left-2"
+          onChange={(e) => {
+            if (e.target.checked) {
+              setSelectedMemos([...selectedMemos, id]);
+            } else {
+              setSelectedMemos(selectedMemos.filter(memoId => memoId !== id));
+            }
+          }}
+        />
+      )}
+      <div>
+        <img src={image} alt="Memo" className="w-full h-32 object-cover rounded-lg" />
+        <h4 className="text-gray-800 dark:text-gray-100 font-bold mt-3">Card title</h4>
+        <p className="text-gray-800 dark:text-gray-100 text-sm">{memoText}</p>
       </div>
       <div>
-        <p className="font-bold">Card title</p>
-        <p>{memoText}</p>
+        <div className="flex items-center justify-end text-gray-800 dark:text-gray-100">
+          <button  onClick={handleClick} className="w-8 h-8 rounded-full bg-gray-800 dark:bg-gray-100 dark:text-gray-800 text-white flex items-center justify-center focus:outline-none focus:ring-2 focus:ring-offset-2  focus:ring-black" aria-label="edit note" role="button">
+            <svg xmlns="http://www.w3.org/2000/svg" className="icon icon-tabler icon-tabler-pencil" width="20" height="20" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" fill="none" strokeLinecap="round" strokeLinejoin="round">
+              <path stroke="none" d="M0 0h24v24H0z"></path>
+              <path d="M4 20h4l10.5 -10.5a1.5 1.5 0 0 0 -4 -4l-10.5 10.5v4"></path>
+              <line x1="13.5" y1="6.5" x2="17.5" y2="10.5"></line>
+            </svg>
+          </button>
+        </div>
       </div>
     </div>
   );
 };
-  
-  export default MemoBlock;
+
+export default MemoBlock;
