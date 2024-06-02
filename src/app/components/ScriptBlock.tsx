@@ -7,6 +7,7 @@ export type ScriptBlockProps = {
   thumbnail: string;
   modifiedTime: string;
   scriptId: string;
+  previewText: string;
 };
 
 const ScriptBlock: NextPage<ScriptBlockProps> = ({
@@ -14,7 +15,8 @@ const ScriptBlock: NextPage<ScriptBlockProps> = ({
   title,
   thumbnail,
   modifiedTime,
-  scriptId
+  scriptId,
+  previewText
 }) => {
   const router = useRouter();
 
@@ -24,21 +26,17 @@ const ScriptBlock: NextPage<ScriptBlockProps> = ({
 
   return (
     <div
-      className={`self-stretch w-full flex flex-row items-start justify-between pt-0 px-0 pb-[27px] box-border gap-[16px] text-left text-base text-black font-ui-16-semi ${className}`}
+      className={`bg-white shadow-lg rounded-lg p-4 mb-4 flex ${className}`}
       onClick={handleClick}
     >
-      <div className="self-stretch w-[50px] h-[50px] relative rounded-lg bg-whitesmoke shrink-0 [debug_commit:bf4bc93]" style={{ backgroundImage: `url(${thumbnail})`, backgroundSize: 'cover' }} />
-      <div className="flex-1 flex flex-row items-center justify-between gap-[33px] shrink-0 [debug_commit:bf4bc93]">
-        <b className="relative font-semibold inline-block min-w-[68px]">
-          {title}
-        </b>
-        <a
-          className="[text-decoration:none] relative text-[inherit] inline-block min-w-[60px]"
-        >
-          {modifiedTime}
-        </a>
+      <img src={thumbnail} alt={title} className="w-32 h-32 object-cover rounded-lg mr-4" />
+      <div>
+        <div className="flex items-center mb-2">
+          <h2 className="text-base font-semibold">{title}</h2>
+        </div>
+        <p className="text-xs text-gray-500">최종 수정시간 <strong>{modifiedTime}</strong></p>
+        <p className="text-xs text-gray-500 mt-2">{previewText}</p>
       </div>
-      <div className="self-stretch h-px relative box-border border-t-[1px] border-solid border-gainsboro" />
     </div>
   );
 };

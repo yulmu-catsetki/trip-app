@@ -1,36 +1,36 @@
 'use client'
-import React from 'react';
-import { useRouter } from "next/navigation";
+
+import React, { useState } from 'react';
 
 interface TextInputProps {
   prop: string;
   className?: string;
-  bStyle?: React.CSSProperties;
   value: string;
   onChange: (value: string) => void;
 }
 
-const TextInput: React.FC<TextInputProps> = ({ prop, className, bStyle, value, onChange }) => {
-    return (
+const TextInput: React.FC<TextInputProps> = ({ prop, className, value, onChange }) => {
+  const [focused, setFocused] = useState(false);
+
+  return (
+    <div className={`relative group ${className}`}>
       <div
-        className={`self-stretch flex flex-row items-start justify-start py-0 px-4 box-border max-w-full text-left text-base font-ui-16-semi ${className}`}
+        className={`absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none transition-all duration-300 ${
+          (focused || value) ? 'text-emerald-500 scale-0' : 'text-gray-400 font-semibold'
+        }`}
       >
-        <div className="flex-1 flex flex-col items-start justify-start max-w-full"> {}
-                <b
-                    className="relative font-semibold inline-block min-w-[68px]"
-                    style={{ ...bStyle, color: '#5db075' }}
-                >
-                    {prop}
-                </b>
-          <input
-            type="text"
-            value={value}
-            onChange={e => onChange(e.target.value)}
-            className="self-stretch text-black relative bg-slate-100 rounded-lg max-w-full overflow-hidden max-h-full"
-          />
-        </div>
+        <span>{prop}</span>
       </div>
-    );
-  };
+      <input
+        type="text"
+        value={value}
+        onChange={(e) => onChange(e.target.value)}
+        onFocus={() => setFocused(true)}
+        onBlur={() => setFocused(false)}
+        className="block w-full py-2 pl-2 pr-3 rounded-lg bg-gray-200 focus:bg-white focus:outline-none focus:ring-2 focus:ring-emerald-500 transition-all duration-300"
+      />
+    </div>
+  );
+};
 
 export default TextInput;

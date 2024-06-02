@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import Button from '@/app/components/Button';
+import Button from '@/app/components/utils/Button';
 
 export default function Home() {
   // todo : memo db에서 memo 불러오기

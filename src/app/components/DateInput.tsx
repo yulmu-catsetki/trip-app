@@ -1,44 +1,58 @@
-"use client"
+'use client'
 
-import React from 'react';
+import React, { useState } from 'react';
 
 interface DateInputProps {
   prop: string;
   className?: string;
-  bStyle?: React.CSSProperties;
   startDate: string;
   endDate: string;
   setStartDate: (value: string) => void;
   setEndDate: (value: string) => void;
 }
 
-const DateInput: React.FC<DateInputProps> = ({ prop, className, bStyle, startDate, endDate, setStartDate, setEndDate }) => {
+const DateInput: React.FC<DateInputProps> = ({ prop, className, startDate, endDate, setStartDate, setEndDate }) => {
+  const [startFocused, setStartFocused] = useState(false);
+  const [endFocused, setEndFocused] = useState(false);
+
   return (
-    <div
-      className={`self-stretch flex flex-row items-start justify-start py-0 px-4 box-border max-w-full text-left text-base text-green-primary font-ui-16-semi ${className}`}
-    >
-      <div className="flex-1 flex flex-col items-start justify-start gap-[7px] max-w-full">
-        <b
-          className="relative font-semibold inline-block min-w-[68px]"
-          style={{ ...bStyle, color: '#5db075' }}
-        >
-          {prop}
-        </b>
-        <input
-          type="date"
-          value={startDate}
-          onChange={e => setStartDate(e.target.value)}
-          className="self-stretch text-black bg-slate-100 relative rounded-lg max-w-full overflow-hidden max-h-full"
-        />
-        <input
-          type="date"
-          value={endDate}
-          onChange={e => setEndDate(e.target.value)}
-          className="self-stretch text-black bg-slate-100 relative rounded-lg max-w-full overflow-hidden max-h-full"
-        />
+    <div className={`flex flex-col gap-2 w-full ${className}`}>
+      <label className="text-gray-400 font-semibold">{prop}</label>
+      <div className="flex flex-col gap-2 w-full">
+        <div className="w-full">
+          <div
+            className={`absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none transition-all duration-300 ${(startFocused || startDate) ? 'text-emerald-500 scale-0' : 'text-gray-500'
+              }`}
+          >
+          </div>
+          <input
+            type="date"
+            value={startDate}
+            onChange={(e) => setStartDate(e.target.value)}
+            onFocus={() => setStartFocused(true)}
+            onBlur={() => setStartFocused(false)}
+            className="block w-full py-2 pl-2 pr-3 rounded-lg bg-gray-200 focus:bg-white focus:outline-none focus:ring-2 focus:ring-emerald-500 transition-all duration-300"
+            style={{ color: startDate ? 'black' : 'transparent' }}          
+          />
+        </div>
+        <div className="w-full">
+          <div
+            className={`absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none transition-all duration-300 ${(endFocused || endDate) ? 'text-emerald-500 scale-0' : 'text-gray-500'
+              }`}
+          >
+            
+          </div>
+          <input
+            type="date"
+            value={endDate}
+            onChange={(e) => setEndDate(e.target.value)}
+            onFocus={() => setEndFocused(true)}
+            onBlur={() => setEndFocused(false)}
+            className="block w-full py-2 pl-2 pr-3 rounded-lg bg-gray-200 focus:bg-white focus:outline-none focus:ring-2 focus:ring-emerald-500 transition-all duration-300"
+            style={{ color: endDate ? 'black' : 'transparent' }}   
+          />
+        </div>
       </div>
     </div>
   );
-};
-
-export default DateInput;
+};export default DateInput;
