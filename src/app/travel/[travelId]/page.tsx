@@ -22,19 +22,19 @@ const TravelPage = () => {
 
   return (
     <div className="flex flex-col gap-6 w-full items-center justify-start h-auto mx-auto">
-      <Title text="여행 목록보기" /> 
+      <Title text="여행 목록보기" />
       <div className="bg-gray-200 text-sm text-gray-500 leading-none border-2 border-gray-200 rounded-full inline-flex">
-        <button 
+        <button
           onClick={() => handleButtonClick('grid')}
-          className={`inline-flex items-center transition-colors duration-300 ease-in focus:outline-none hover:text-blue-400 focus:text-blue-400 rounded-l-full px-4 py-2 ${activeButton === 'grid' ? 'bg-white text-blue-400 rounded-full' : ''}`}
+          className={`inline-flex items-center transition-colors duration-300 ease-in focus:outline-none hover:text-blue-400 focus:text-blue-400 rounded-full px-4 py-2 ${activeButton === 'grid' ? 'bg-white text-blue-400' : ''}`}
           id="grid"
         >
           {/* SVG and span elements */}
           <span>사진/메모 보기</span>
         </button>
-        <button 
+        <button
           onClick={() => handleButtonClick('list')}
-          className={`inline-flex items-center transition-colors duration-300 ease-in focus:outline-none hover:text-blue-400 focus:text-blue-400 rounded-r-full px-4 py-2 ${activeButton === 'list' ? 'bg-white text-blue-400 rounded-full' : ''}`}
+          className={`inline-flex items-center transition-colors duration-300 ease-in focus:outline-none hover:text-blue-400 focus:text-blue-400 rounded-full px-4 py-2 ${activeButton === 'list' ? 'bg-white text-blue-400' : ''}`}
           id="list"
         >
           {/* SVG and span elements */}
