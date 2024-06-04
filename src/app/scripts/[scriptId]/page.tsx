@@ -36,8 +36,6 @@ export default function Home() {
         }
         const tokenData = await tokenResponse.json();
         const token = tokenData.access_token;
-
-
         if (script_id != "new") {
           const response = await fetch(`https://hci-spring2024.vercel.app/script/get_script/${script_id}`, {
             method: 'GET',
@@ -144,11 +142,12 @@ export default function Home() {
         },
         body: JSON.stringify(script_content),
       });
-
+      console.log(script_content);
       if (!response.ok) {
+        
         throw new Error('Failed to activate AI assistant');
       }
-
+      
       const data = await response.json();
       console.log(data);
       setResponseData(data);
