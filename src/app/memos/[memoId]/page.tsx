@@ -128,6 +128,7 @@ export default function Home() {
     } catch (error) {
       console.error(error);
     }
+    router.back();
   };
 
   return (

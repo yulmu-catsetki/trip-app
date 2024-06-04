@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { usePathname,useRouter } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 import MemoBlock from '@/app/components/MemoBlock';
 import Title from '@/app/components/Title';
 import ScriptBlock from '@/app/components/ScriptBlock';
@@ -9,8 +9,11 @@ import Button from '@/app/components/utils/Button';
 
 const TravelPage = () => {
   const router = useRouter();
+
   const [memos, setMemos] = useState([]);
-  const [activeButton, setActiveButton] = useState('list');
+  const [scripts, setScripts] = useState([]);
+
+  const [activeButton, setActiveButton] = useState('grid');
   const [showCheckboxes, setShowCheckboxes] = useState(false);
   const pathname = usePathname();
   const travelId = pathname.replace('/travel/', '');
@@ -53,7 +56,7 @@ const TravelPage = () => {
             memo.imageUrl = `https://hci-spring2024.vercel.app/image/${imageId}`;
           }
         });
-      
+
         setMemos(data);
       } catch (error) {
         console.error(error);
@@ -61,7 +64,47 @@ const TravelPage = () => {
     };
     fetchMemos();
   }, []);
+  
+  useEffect(() => {
+    const fetchScripts = async () => {
+      try {
+        const tokenResponse = await fetch('https://hci-spring2024.vercel.app/user/token', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/x-www-form-urlencoded'
+          },
+          body: `grant_type=password&username=${encodeURIComponent(username)}&password=${encodeURIComponent(password)}`
+        });
 
+        if (!tokenResponse.ok) {
+          throw new Error('Failed to get token');
+        }
+
+        const tokenData = await tokenResponse.json();
+        const token = tokenData.access_token;
+
+        const response = await fetch('https://hci-spring2024.vercel.app/script/get_scripts', {
+          method: 'GET',
+          headers: {
+            'Authorization': `Bearer ${token}`,
+            'Content-Type': 'application/json',
+          },
+        });
+
+        if (!response.ok) {
+          throw new Error('Failed to fetch scripts');
+        }
+
+        const data = await response.json();
+        setScripts(data);
+      } catch (error) {
+        console.error(error);
+      }
+
+    };
+
+    fetchScripts();
+  }, []);
 
 
   const handleButtonClick = (buttonId: string) => {
@@ -69,28 +112,12 @@ const TravelPage = () => {
   };
 
 
-  const exampleScript1 = {
-    title: "Example Script 1",
-    thumbnail: "https://cdn.pixabay.com/photo/2017/11/09/21/41/cat-2934720_1280.jpg",
-    modifiedTime: "2022-01-01",
-    scriptId: "1",
-    previewText: "This is a preview of Example Script 1..."
-  };
-
-  const exampleScript2 = {
-    title: "Example Script 2",
-    thumbnail: "https://cdn.pixabay.com/photo/2021/09/28/13/14/cat-6664412_1280.jpg",
-    modifiedTime: "2022-01-02",
-    scriptId: "2",
-    previewText: "This is a preview of Example Script 2..."
-  };
-
   function handleAddMemoBlock() {
     router.push('/memos/new');
   }
 
   function handleAddScript() {
-    //todo : 스크립트 추가 
+    router.push('/scripts/new');
   }
   function handleCreatePost() {
     //todo : 선택된 메모로 글 작성하기
@@ -99,7 +126,7 @@ const TravelPage = () => {
   const handleMemoSelect = () => {
     setShowCheckboxes(true);
   };
-  
+
 
   return (
     <div className="flex flex-col gap-6 w-full items-center justify-start h-auto mx-auto">
@@ -124,7 +151,7 @@ const TravelPage = () => {
           className={`inline-flex items-center transition-all duration-300 ease-in hover:text-emerald-500  rounded-full px-4 py-2 ${activeButton === 'list' ? 'bg-white text-emerald-500' : 'bg-transparent'}`}
           id="list"
         >
-         <svg className="w-5 h-5 mr-2" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+          <svg className="w-5 h-5 mr-2" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
             <line x1="8" y1="6" x2="21" y2="6" />
             <line x1="8" y1="12" x2="21" y2="12" />
             <line x1="8" y1="18" x2="21" y2="18" />
@@ -138,7 +165,7 @@ const TravelPage = () => {
       {activeButton === 'grid' && (
         <div className="flex flex-col items-center justify-start gap-[30px] leading-[normal] tracking-[normal]">
           <div className="flex grid grid-cols-2 gap-4">
-            {memos.map((memo: { id: string; text: string; imageUrl: string}) => (
+            {memos.map((memo: { id: string; text: string; imageUrl: string }) => (
               <MemoBlock
                 key={memo.id}
                 id={memo.id}
@@ -150,7 +177,7 @@ const TravelPage = () => {
             {!showCheckboxes && (
               <button
                 onClick={handleAddMemoBlock}
-    className="w-full h-64 flex flex-col justify-center items-center dark:bg-gray-800 bg-white dark:border-gray-700 rounded-lg border border-gray-400 mb-6 py-5 px-4"
+                className="w-full h-64 flex flex-col justify-center items-center rounded-lg border border-gray-400 mb-6 py-5 px-4"
               >
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" className="w-10 h-10 text-gray-500">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
@@ -168,9 +195,15 @@ const TravelPage = () => {
       )}
       {activeButton === 'list' && (
         <div className="flex flex-col items-center justify-start gap-[30px] leading-[normal] tracking-[normal]">
-                <ScriptBlock {...exampleScript1} />
-                <ScriptBlock {...exampleScript2} />
-          <Button label="글 작성" onClick={handleAddScript}/>
+          {scripts.map((script: { id: string; title: string; updated_at: string }) => (
+            <ScriptBlock
+              key={script.id}
+              title={script.title}
+              modifiedTime={script.updated_at}
+              scriptId={script.id}
+            />
+          ))}
+          <Button label="글 작성" onClick={handleAddScript} />
         </div>
       )}
     </div>
