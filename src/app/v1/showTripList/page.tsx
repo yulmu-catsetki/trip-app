@@ -1,53 +1,71 @@
 "use client"
+import React, { useEffect, useState } from 'react';
 import TravelBlock from '@/app/components/TravelBlock';
 import { useRouter } from "next/navigation";
 import Title from "@/app/components/Title";
 
 const ShowTripList = () => {
-  const sampleTravels = [
-    { 
-      title: 'Trip to Paris', 
-      thumbnail: 'https://cdn.pixabay.com/photo/2021/07/30/20/28/montmartre-6510653_1280.jpg', 
-      dateFrom: '2022-01-01', 
-      dateTo: '2022-01-07',
-      travelId: '1',
-      place: 'Paris, France',
-      companion: 'John Doe'
-    },
-    { 
-      title: 'Trip to New York', 
-      thumbnail: 'https://cdn.pixabay.com/photo/2016/11/29/04/19/beach-1867285_1280.jpg', 
-      dateFrom: '2022-02-01', 
-      dateTo: '2022-02-14',
-      travelId: '2',
-      place: 'New York, USA',
-      companion: 'Jane Doe'
-    },
-    { 
-      title: 'Trip to Tokyo', 
-      thumbnail: 'https://cdn.pixabay.com/photo/2019/04/20/11/40/japan-4141581_1280.jpg', 
-      dateFrom: '2022-03-01', 
-      dateTo: '2022-03-10',
-      travelId: '3',
-      place: 'Tokyo, Japan',
-      companion: 'John Doe'
-    },
-  ];
+  const [travels, setTravels] = useState([]);
+
+  // 일단 임시로 이렇게 해둘게요 
+  const [username, setUsername] = useState('j');
+  const [password, setPassword] = useState('j');
+
+  useEffect(() => {
+    const fetchTravels = async () => {
+      try {
+
+        const tokenResponse = await fetch('https://hci-spring2024.vercel.app/user/token', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/x-www-form-urlencoded'
+          },
+          body: `grant_type=password&username=${encodeURIComponent(username)}&password=${encodeURIComponent(password)}`
+        });
+    
+        if (!tokenResponse.ok) {
+          throw new Error('Failed to get token');
+        }
+    
+        const tokenData = await tokenResponse.json();
+        const token = tokenData.access_token;  
+    
+
+        const response = await fetch('https://hci-spring2024.vercel.app/travel/get_travels', {
+          headers: {
+            'Authorization': `Bearer ${token}`
+          }
+        });
+    
+        if (!response.ok) {
+          throw new Error('Failed to fetch travels');
+        }
+    
+        const data = await response.json();
+        setTravels(data);
+      } catch (error) {
+        console.error(error);
+        setTravels([]);
+      }
+    };
+
+    fetchTravels();
+  }, []);
 
   return (
     <div className="flex flex-col gap-6 w-full items-center justify-start h-auto mx-auto">
       <Title text="여행 목록보기" /> 
       <div className="flex flex-col items-center justify-start gap-[30px] leading-[normal] tracking-[normal]">
-      {sampleTravels.map((travel, index) => (
-        <TravelBlock
-          key={index}
-          title={travel.title}
-          thumbnail={travel.thumbnail}
-          dateFrom={travel.dateFrom}
-          dateTo={travel.dateTo}
-          travelId={travel.travelId}
-          place={travel.place}
-          companion={travel.companion}
+      {travels.map(travel => (
+        <TravelBlock 
+          key={travel.id}
+          title={travel.name}
+          thumbnail="https://cdn.pixabay.com/photo/2020/03/31/10/48/park-4987160_1280.jpg"
+          dateFrom="없음"
+          dateTo="없음"
+          travelId={travel.id}
+          place={travel.description} 
+          companion="없음"
         />
       ))}
       </div>
