@@ -18,7 +18,7 @@ const MemoBlock: FC<MemoBlockProps> = ({ id, memoText, image, showCheckbox }) =>
   };
 
   return (
-    <div className={`w-full h-64 flex flex-col justify-between dark:bg-gray-800 bg-white dark:border-gray-700 rounded-lg border border-gray-400 mb-6 py-5 px-4 relative ${showCheckbox && !selectedMemos.includes(id) ? 'opacity-50' : ''}`}>
+    <div className={`w-50 h-64 flex flex-col justify-between dark:bg-gray-800 bg-white dark:border-gray-700 rounded-lg border border-gray-400 mb-6 py-5 px-4 relative ${showCheckbox && !selectedMemos.includes(id) ? 'opacity-50' : ''}`}>
       {showCheckbox && (
         <input
           type="checkbox"
@@ -34,7 +34,6 @@ const MemoBlock: FC<MemoBlockProps> = ({ id, memoText, image, showCheckbox }) =>
       )}
       <div>
         <img src={image} alt="Memo" className="w-full h-32 object-cover rounded-lg" />
-        <h4 className="text-gray-800 dark:text-gray-100 font-bold mt-3">Card title</h4>
         <p className="text-gray-800 dark:text-gray-100 text-sm">{memoText}</p>
       </div>
       <div>

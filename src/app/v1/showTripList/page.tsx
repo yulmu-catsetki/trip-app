@@ -5,8 +5,7 @@ import { useRouter } from "next/navigation";
 import Title from "@/app/components/Title";
 
 const ShowTripList = () => {
-  const [travels, setTravels] = useState([]);
-
+  const [travels, setTravels] = useState<{ id: string, name: string, description: string }[]>([]);
   // 일단 임시로 이렇게 해둘게요 
   const [username, setUsername] = useState('j');
   const [password, setPassword] = useState('j');

@@ -1,7 +1,7 @@
 'use client';
 
-import { useState } from 'react';
-import { useRouter } from 'next/navigation';
+import { useEffect, useState } from 'react';
+import { usePathname,useRouter } from 'next/navigation';
 import MemoBlock from '@/app/components/MemoBlock';
 import Title from '@/app/components/Title';
 import ScriptBlock from '@/app/components/ScriptBlock';
@@ -9,12 +9,65 @@ import Button from '@/app/components/utils/Button';
 
 const TravelPage = () => {
   const router = useRouter();
+  const [memos, setMemos] = useState([]);
   const [activeButton, setActiveButton] = useState('list');
   const [showCheckboxes, setShowCheckboxes] = useState(false);
+  const pathname = usePathname();
+  const travelId = pathname.replace('/travel/', '');
+
+  // 일단 임시로 이렇게 해둘게요 
+  const [username, setUsername] = useState('j');
+  const [password, setPassword] = useState('j');
+
+  useEffect(() => {
+    const fetchMemos = async () => {
+      try {
+        const tokenResponse = await fetch('https://hci-spring2024.vercel.app/user/token', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/x-www-form-urlencoded'
+          },
+          body: `grant_type=password&username=${encodeURIComponent(username)}&password=${encodeURIComponent(password)}`
+        });
+
+        if (!tokenResponse.ok) {
+          throw new Error('Failed to get token');
+        }
+
+        const tokenData = await tokenResponse.json();
+        const token = tokenData.access_token;
+
+        const response = await fetch(`https://hci-spring2024.vercel.app/memo/get_memos`, {
+          headers: {
+            'Authorization': `Bearer ${token}`
+          }
+        });
+
+        if (!response.ok) {
+          throw new Error('Failed to fetch memo');
+        }
+        const data = await response.json();
+        data.forEach((memo: { images: string | any[]; imageUrl: string; }) => {
+          if (memo.images && memo.images.length > 0) {
+            const imageId = memo.images[0];
+            memo.imageUrl = `https://hci-spring2024.vercel.app/image/${imageId}`;
+          }
+        });
+      
+        setMemos(data);
+      } catch (error) {
+        console.error(error);
+      }
+    };
+    fetchMemos();
+  }, []);
+
+
 
   const handleButtonClick = (buttonId: string) => {
     setActiveButton(buttonId);
   };
+
 
   const exampleScript1 = {
     title: "Example Script 1",
@@ -33,8 +86,7 @@ const TravelPage = () => {
   };
 
   function handleAddMemoBlock() {
-    //todo : 메모 추가 + id도 제대로 만들기
-    router.push(`/memos/newmemo`);
+    router.push('/memos/new');
   }
 
   function handleAddScript() {
@@ -85,15 +137,19 @@ const TravelPage = () => {
       </div>
       {activeButton === 'grid' && (
         <div className="flex flex-col items-center justify-start gap-[30px] leading-[normal] tracking-[normal]">
-        <div className="flex grid grid-cols-2 gap-4">
-          <MemoBlock id="1" memoText="Memo 1" image="https://cdn.pixabay.com/photo/2021/09/28/13/14/cat-6664412_1280.jpg" showCheckbox={showCheckboxes} />
-          <MemoBlock id="2" memoText="Memo 2" image="https://cdn.pixabay.com/photo/2014/04/13/20/49/cat-323262_1280.jpg" showCheckbox={showCheckboxes} />
-          <MemoBlock id="3" memoText="Memo 3" image="https://cdn.pixabay.com/photo/2017/11/09/21/41/cat-2934720_1280.jpg" showCheckbox={showCheckboxes} />
-          <MemoBlock id="4" memoText="Memo 4" image="https://cdn.pixabay.com/photo/2017/11/09/21/41/cat-2934720_1280.jpg" showCheckbox={showCheckboxes} />
-          <MemoBlock id="5" memoText="Memo 5" image="https://cdn.pixabay.com/photo/2017/11/09/21/41/cat-2934720_1280.jpg" showCheckbox={showCheckboxes} />
-          {!showCheckboxes && (
-  <button
-    onClick={handleAddMemoBlock}
+          <div className="flex grid grid-cols-2 gap-4">
+            {memos.map((memo: { id: string; text: string; imageUrl: string}) => (
+              <MemoBlock
+                key={memo.id}
+                id={memo.id}
+                memoText={memo.text}
+                image={memo.imageUrl}
+                showCheckbox={showCheckboxes}
+              />
+            ))}
+            {!showCheckboxes && (
+              <button
+                onClick={handleAddMemoBlock}
     className="w-full h-64 flex flex-col justify-center items-center dark:bg-gray-800 bg-white dark:border-gray-700 rounded-lg border border-gray-400 mb-6 py-5 px-4"
               >
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" className="w-10 h-10 text-gray-500">
