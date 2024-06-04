@@ -14,11 +14,12 @@ export default function Home() {
   const [date, setDate] = useState("Published on April 4, 2023");
   const [content, setContent] = useState("Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla facilisi. Sed sit amet feugiat eros, eget eleifend dolor. Proin maximus bibendum felis, id fermentum odio vestibulum id. Sed ac ligula eget dolor consequat tincidunt. Nullam fringilla ipsum et ex lacinia, at bibendum elit posuere. Aliquam eget leo nec nibh mollis consectetur.");
 
+  
   // 일단 임시로 이렇게 해둘게요 
   const [username, setUsername] = useState('j');
   const [password, setPassword] = useState('j');
   const [token, setToken] = useState('');
-
+  const [responseData, setResponseData] = useState(null);
   useEffect(() => {
     const fetchScript = async () => {
       try {
@@ -78,18 +79,19 @@ export default function Home() {
       }
 
       const tokenData = await tokenResponse.json();
+      console.log(tokenData);
       const token = tokenData.access_token;
 
       const script = {
         title: title,
-        content: [{ "text": content,"type":"text" }],
-        travel_id: "665db1465147894c5b2073d5",
+        content: [{ "text": content,"type":"text" },],
+        travel_id: "665db1465147894c5b2073d5"
       };
 
       let url = 'https://hci-spring2024.vercel.app/script/create_script';
       let method = 'POST';
 
-      if (script_id) {
+      if (script_id != "new") {
         url = `https://hci-spring2024.vercel.app/script/update_script/${script_id}`;
         method = 'PUT';
       }
@@ -129,9 +131,8 @@ export default function Home() {
       const script_content = [
         {
           "type": "text",
-          "content": "This is some text content"
+          "content": content,
         },
-        // ...add more dictionaries as needed
       ];
       const tokenData = await tokenResponse.json();
       const token = tokenData.access_token;
@@ -145,12 +146,12 @@ export default function Home() {
       });
 
       if (!response.ok) {
-        console.log(script_content)
         throw new Error('Failed to activate AI assistant');
       }
 
       const data = await response.json();
       console.log(data);
+      setResponseData(data);
     } catch (error) {
       console.error(error);
     }
@@ -179,6 +180,16 @@ export default function Home() {
                   label="Activate"
                 >
                 </Button>
+                {responseData && (
+                  <div>
+                    <h2>Questions:</h2>
+                    <ul>
+                      {(responseData as { questions: string[] }).questions.map((question, index) => (
+                        <li key={index}>{question}</li>
+                      ))}
+                    </ul>
+                  </div>
+                )}
               </div>
             )}
           </div>
