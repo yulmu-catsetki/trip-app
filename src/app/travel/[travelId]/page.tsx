@@ -9,9 +9,9 @@ import Button from '@/app/components/utils/Button';
 
 const TravelPage = () => {
   const router = useRouter();
-
   const [memos, setMemos] = useState([]);
   const [scripts, setScripts] = useState([]);
+  const [selectedMemos, setSelectedMemos] = useState({});
 
   const [activeButton, setActiveButton] = useState('grid');
   const [showCheckboxes, setShowCheckboxes] = useState(false);
@@ -21,6 +21,10 @@ const TravelPage = () => {
   // 일단 임시로 이렇게 해둘게요 
   const [username, setUsername] = useState('j');
   const [password, setPassword] = useState('j');
+
+  const handleMemoSelectionChange = (id: string, isSelected: boolean) => {
+    setSelectedMemos(prevState => ({ ...prevState, [id]: isSelected }));
+  };
 
   useEffect(() => {
     const fetchMemos = async () => {
@@ -119,8 +123,55 @@ const TravelPage = () => {
   function handleAddScript() {
     router.push('/scripts/new');
   }
-  function handleCreatePost() {
-    //todo : 선택된 메모로 글 작성하기
+  async function handleCreatePost() {
+    try {
+      const selectedMemoTexts = memos
+      .filter((memo: { id: string }) => selectedMemos[memo.id])
+      .map((memo: { text: string }) => memo.text)
+      .join('\n');
+      console.log(selectedMemoTexts);
+
+      // Fetch the token
+      const tokenResponse = await fetch('https://hci-spring2024.vercel.app/user/token', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded'
+        },
+        body: `grant_type=password&username=${encodeURIComponent(username)}&password=${encodeURIComponent(password)}`
+      });
+  
+      if (!tokenResponse.ok) {
+        throw new Error('Failed to get token');
+      }
+  
+      const tokenData = await tokenResponse.json();
+      const token = tokenData.access_token;
+  
+      // Make a POST request to the script creation API
+      const response = await fetch('https://hci-spring2024.vercel.app/script/create_script', {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          title: 'New Script from Selected Memos',
+          content: [{ "text": selectedMemoTexts,"type":"text" },],
+          travel_id: travelId,
+        }),
+      });
+  
+      if (!response.ok) {
+        throw new Error('Failed to create script');
+      }
+  
+      const scriptData = await response.json();
+  
+      // Navigate to the script page
+      router.push(`/scripts/${scriptData.id}`);
+    } catch (error) {
+      console.error(error);
+    }
   }
 
   const handleMemoSelect = () => {
@@ -166,13 +217,16 @@ const TravelPage = () => {
         <div className="flex flex-col items-center justify-start gap-[30px] leading-[normal] tracking-[normal]">
           <div className="flex grid grid-cols-2 gap-4">
             {memos.map((memo: { id: string; text: string; imageUrl: string }) => (
+        
               <MemoBlock
                 key={memo.id}
                 id={memo.id}
                 memoText={memo.text}
                 image={memo.imageUrl}
                 showCheckbox={showCheckboxes}
-              />
+                onSelectionChange={handleMemoSelectionChange} 
+                isSelected={false}              
+                />
             ))}
             {!showCheckboxes && (
               <button
