@@ -4,10 +4,10 @@ import { useEffect,useState,useRef } from 'react';
 import { usePathname,useRouter } from 'next/navigation';
 import Button from '@/app/components/utils/Button';
 export default function Home() {
-  // todo : memo db에서 memo 불러오기
+
   const router = useRouter();
   const [memo, setMemo] = useState('');
-  const [file, setFile] = useState([]);
+
   const pathname = usePathname();
   const memoId = pathname.replace('/memos/', '');
   // 일단 임시로 이렇게 해둘게요 
@@ -75,7 +75,6 @@ export default function Home() {
         if (data.images && data.images.length > 0) {
           const imageId = data.images[0]; // Get the first image ID
           setImageUrl(`https://hci-spring2024.vercel.app/image/${imageId}`); 
-        
         }
       } catch (error) {
         console.error(error);

@@ -1,6 +1,8 @@
+"use client"
 import { FC } from 'react';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
+
 
 type MemoBlockProps = {
   id: string;
@@ -15,7 +17,8 @@ const MemoBlock: FC<MemoBlockProps> = ({ id, memoText, image, showCheckbox, onSe
   const router = useRouter();
   const [selected, setSelected] = useState(false);
 
-
+  const [username, setUsername] = useState('j');
+  const [password, setPassword] = useState('j');
   const handleClick = () => {
     router.push(`/memos/${id}`);
   };
@@ -23,6 +26,40 @@ const MemoBlock: FC<MemoBlockProps> = ({ id, memoText, image, showCheckbox, onSe
     const newSelectedState = !selected;
     setSelected(newSelectedState);
     onSelectionChange(id, newSelectedState);
+  };
+
+  const handleDeleteMemo =async (event: React.MouseEvent<HTMLButtonElement>) => {
+    const id = event.currentTarget.id;
+    try {
+      const tokenResponse = await fetch('https://hci-spring2024.vercel.app/user/token', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded'
+        },
+        body: `grant_type=password&username=${encodeURIComponent(username)}&password=${encodeURIComponent(password)}`
+      });
+  
+      if (!tokenResponse.ok) {
+        throw new Error('Failed to get token');
+      }
+  
+      const tokenData = await tokenResponse.json();
+      const token = tokenData.access_token;
+  
+      const response = await fetch(`https://hci-spring2024.vercel.app/memo/delete_memo/${id}`, {
+        method: 'DELETE',
+        headers: {
+          'Authorization': `Bearer ${token}`
+        }
+      });
+  
+      if (!response.ok) {
+        throw new Error('Failed to delete memo');
+      }
+  
+    } catch (error) {
+      console.error(error);
+    }
   };
   return (
     <div className={`w-50 h-64 flex flex-col justify-between rounded-lg border border-gray-400 mb-6 py-5 px-4 relative ${showCheckbox && !selected ? 'opacity-50' : ''}`}>
@@ -48,6 +85,7 @@ const MemoBlock: FC<MemoBlockProps> = ({ id, memoText, image, showCheckbox, onSe
               <line x1="13.5" y1="6.5" x2="17.5" y2="10.5"></line>
             </svg>
           </button>
+          <button onClick={handleDeleteMemo}>Delete</button>
         </div>
       </div>
     </div>

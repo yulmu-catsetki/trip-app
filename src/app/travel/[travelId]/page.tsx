@@ -11,7 +11,7 @@ const TravelPage = () => {
   const router = useRouter();
   const [memos, setMemos] = useState([]);
   const [scripts, setScripts] = useState([]);
-  const [selectedMemos, setSelectedMemos] = useState({});
+  const [selectedMemos, setSelectedMemos] = useState([]);
 
   const [activeButton, setActiveButton] = useState('grid');
   const [showCheckboxes, setShowCheckboxes] = useState(false);
@@ -126,7 +126,7 @@ const TravelPage = () => {
   async function handleCreatePost() {
     try {
       const selectedMemoTexts = memos
-      .filter((memo: { id: string }) => selectedMemos[memo.id])
+      .filter((memo: { id: string }) => selectedMemos[memo.id as unknown as number])
       .map((memo: { text: string }) => memo.text)
       .join('\n');
       console.log(selectedMemoTexts);
