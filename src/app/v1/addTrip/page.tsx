@@ -54,9 +54,9 @@ const AddTrip = () => {
                 },
                 body: JSON.stringify({
                     name: tripName,
-                    description: tripLocation,
-                    companion: tripCompanion, // Add companion field
-                    startDate: startDate, // Add start date field
+                    tripLocation: tripLocation,
+                    tripCompanion: tripCompanion, 
+                    startDate: startDate, 
                     endDate: endDate, 
                 })
             });

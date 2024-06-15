@@ -53,20 +53,20 @@ const ShowTripList = () => {
 
   return (
     <div className="flex flex-col gap-6 w-full items-center justify-start h-auto mx-auto">
-      <Title text="여행 목록보기" /> 
+      <Title text="여행 목록보기" />
       <div className="flex flex-col items-center justify-start gap-[30px] leading-[normal] tracking-[normal]">
-      {travels.map((travel :{id:string, name:string, description:string}) => (
-        <TravelBlock 
-          key={travel.id}
-          title={travel.name}
-          thumbnail="https://cdn.pixabay.com/photo/2020/03/31/10/48/park-4987160_1280.jpg"
-          dateFrom="없음"
-          dateTo="없음"
-          place={travel.description} 
-          travelId={travel.id}
-          companion="없음"
-        />
-      ))}
+        {travels.map((travel: { id: string, name: string, description: string, startDate: string, endDate: string, tripLocation: string, tripCompanion: string }) => (
+          <TravelBlock
+            key={travel.id}
+            title={travel.name}
+            thumbnail="https://cdn.pixabay.com/photo/2020/03/31/10/48/park-4987160_1280.jpg"
+            dateFrom={travel.startDate}
+            dateTo={travel.endDate}
+            place={travel.tripLocation}
+            travelId={travel.id}
+            companion={travel.tripCompanion}
+          />
+        ))}
       </div>
     </div>
   );
