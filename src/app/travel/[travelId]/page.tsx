@@ -87,7 +87,7 @@ const TravelPage = () => {
         const tokenData = await tokenResponse.json();
         const token = tokenData.access_token;
 
-        const response = await fetch('https://hci-spring2024.vercel.app/script/get_scripts', {
+        const response = await fetch(`https://hci-spring2024.vercel.app/script/get_scripts/${travelId}`, {
           method: 'GET',
           headers: {
             'Authorization': `Bearer ${token}`,
