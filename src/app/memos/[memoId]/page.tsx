@@ -1,13 +1,14 @@
 "use client"
 
 import { useEffect,useState,useRef } from 'react';
-import { usePathname,useRouter } from 'next/navigation';
+import { usePathname,useRouter,useSearchParams  } from 'next/navigation';
 import Button from '@/app/components/utils/Button';
 export default function Home() {
 
   const router = useRouter();
   const [memo, setMemo] = useState('');
-
+  const searchParams = useSearchParams();
+  const travelId = searchParams.get('travelId');
   const pathname = usePathname();
   const memoId = pathname.replace('/memos/', '');
   // 일단 임시로 이렇게 해둘게요 
@@ -102,7 +103,9 @@ export default function Home() {
 
       const formData = new FormData();
       formData.append('text', memo);
-      formData.append('travel_id', '665db1465147894c5b2073d5'); 
+      if (travelId !== null) {
+        formData.append('travel_id', travelId);
+      }
       const files = fileInput.current?.files;
       if (files) {
         for (let i = 0; i < files.length; i++) {

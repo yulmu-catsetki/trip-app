@@ -117,11 +117,11 @@ const TravelPage = () => {
 
 
   function handleAddMemoBlock() {
-    router.push('/memos/new');
+    router.push(`/memos/new?travelId=${travelId}`);
   }
 
   function handleAddScript() {
-    router.push('/scripts/new');
+    router.push('/scripts/new?travelId=${travelId}');
   }
   async function handleCreatePost() {
     try {
