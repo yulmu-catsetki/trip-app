@@ -75,7 +75,7 @@ const MemoBlock: FC<MemoBlockProps> = ({ id, memoText, image, showCheckbox, trav
       )}
       <div>
         <img src={image} alt="Memo" className="w-full h-32 object-cover rounded-lg mb-4" />
-        <p className="text-gray-800 text-sm">{memoText}</p>
+        <p className="text-gray-800 text-sm overflow-hidden text-overflow-ellipsis whitespace-nowrap">{memoText}</p>
       </div>
       <div>
         <div className="flex items-center gap-2 justify-end text-gray-800 ">
