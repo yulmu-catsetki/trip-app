@@ -14,8 +14,7 @@ export default function Home() {
   const [date, setDate] = useState("Published on April 4, 2023");
   const [content, setContent] = useState("Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla facilisi. Sed sit amet feugiat eros, eget eleifend dolor. Proin maximus bibendum felis, id fermentum odio vestibulum id. Sed ac ligula eget dolor consequat tincidunt. Nullam fringilla ipsum et ex lacinia, at bibendum elit posuere. Aliquam eget leo nec nibh mollis consectetur.");
 
-  
-  // 일단 임시로 이렇게 해둘게요 
+
   const [username, setUsername] = useState('j');
   const [password, setPassword] = useState('j');
   const [token, setToken] = useState('');

@@ -29,7 +29,6 @@ const MemoBlock: FC<MemoBlockProps> = ({ id, memoText, image, showCheckbox, onSe
   };
 
   const handleDeleteMemo =async (event: React.MouseEvent<HTMLButtonElement>) => {
-    const id = event.currentTarget.id;
     try {
       const tokenResponse = await fetch('https://hci-spring2024.vercel.app/user/token', {
         method: 'POST',
@@ -77,7 +76,7 @@ const MemoBlock: FC<MemoBlockProps> = ({ id, memoText, image, showCheckbox, onSe
         <p className="text-gray-800 text-sm">{memoText}</p>
       </div>
       <div>
-        <div className="flex items-center justify-end text-gray-800 ">
+        <div className="flex items-center gap-2 justify-end text-gray-800 ">
           <button onClick={handleClick} className="w-8 h-8 rounded-full bg-gray-800 text-white flex items-center justify-center focus:outline-none focus:ring-2 focus:ring-offset-2  focus:ring-black" aria-label="edit note" role="button">
             <svg xmlns="http://www.w3.org/2000/svg" className="icon icon-tabler icon-tabler-pencil" width="20" height="20" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" fill="none" strokeLinecap="round" strokeLinejoin="round">
               <path stroke="none" d="M0 0h24v24H0z"></path>
@@ -85,7 +84,16 @@ const MemoBlock: FC<MemoBlockProps> = ({ id, memoText, image, showCheckbox, onSe
               <line x1="13.5" y1="6.5" x2="17.5" y2="10.5"></line>
             </svg>
           </button>
-          <button onClick={handleDeleteMemo}>Delete</button>
+          <button onClick={handleDeleteMemo} className="w-8 h-8 rounded-full bg-red-500 text-white flex items-center justify-center focus:outline-none focus:ring-2 focus:ring-offset-2  focus:ring-black" aria-label="delete note" role="button">
+            <svg xmlns="http://www.w3.org/2000/svg" className="icon icon-tabler icon-tabler-trash" width="20" height="20" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" fill="none" strokeLinecap="round" strokeLinejoin="round">
+              <path stroke="none" d="M0 0h24v24H0z"></path>
+              <line x1="4" y1="7" x2="20" y2="7"></line>
+              <line x1="10" y1="11" x2="10" y2="17"></line>
+              <line x1="14" y1="11" x2="14" y2="17"></line>
+              <path d="M5 7l1 12a2 2 0 0 0 2 2h8a2 2 0 0 0 2 -2l1 -12"></path>
+              <path d="M9 7v-3a1 1 0 0 1 1 -1h4a1 1 0 0 1 1 1v3"></path>
+            </svg>
+          </button>
         </div>
       </div>
     </div>

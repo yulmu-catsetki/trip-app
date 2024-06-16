@@ -195,7 +195,7 @@ const TravelPage = () => {
             <line x1="3" y1="16" x2="21" y2="16" />
             <line x1="3" y1="8" x2="21" y2="8" />
           </svg>
-          <span>사진/메모 보기</span>
+          <span>내 여행 메모</span>
         </button>
         <button
           onClick={() => handleButtonClick('list')}
@@ -210,7 +210,7 @@ const TravelPage = () => {
             <line x1="3" y1="12" x2="3" y2="12" />
             <line x1="3" y1="18" x2="3" y2="18" />
           </svg>
-          <span>글 스크립트 보기</span>
+          <span>내 여행 다이어리</span>
         </button>
       </div>
       {activeButton === 'grid' && (
