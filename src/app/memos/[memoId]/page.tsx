@@ -148,12 +148,13 @@ export default function Home() {
         </b>
       </div>
       <div className="flex flex-col items-center justify-start gap-[30px] leading-[normal] tracking-[normal]">
-        <input type="file" ref={fileInput} multiple onChange={handleFileChange}/>
-        <img
-          src={imageUrl}
-          alt="Description of the image"
-          style={{ width: '200px', height: '200px', objectFit: 'cover' }}
-        />
+        <input type="file" ref={fileInput} multiple onChange={handleFileChange} />
+        {imageUrl && (
+          <img
+            src={imageUrl}
+            style={{ width: '200px', height: '200px', objectFit: 'cover' }}
+          />
+        )}
         <textarea
           className="w-full h-64 p-3 border rounded-md"
           value={memo}
