@@ -1,6 +1,6 @@
 "use client"
 
-import { useEffect,useState,useRef } from 'react';
+import { useEffect,useState,useRef, ChangeEventHandler } from 'react';
 import { usePathname,useRouter,useSearchParams  } from 'next/navigation';
 import Button from '@/app/components/utils/Button';
 export default function Home() {
@@ -17,7 +17,12 @@ export default function Home() {
   const [imageUrl, setImageUrl] = useState('');
   const [token,setToken]=useState('');
   const fileInput = useRef<HTMLInputElement>(null);
-
+  const handleFileChange: ChangeEventHandler<HTMLInputElement> = (event) => {
+    if (event.target.files && event.target.files[0]) {
+      const imageUrl = URL.createObjectURL(event.target.files[0]);
+      setImageUrl(imageUrl);
+    }
+  };
   useEffect(() => {
     const getAccessToken = async () => {
       try {
@@ -143,7 +148,7 @@ export default function Home() {
         </b>
       </div>
       <div className="flex flex-col items-center justify-start gap-[30px] leading-[normal] tracking-[normal]">
-        <input type="file" ref={fileInput} multiple />
+        <input type="file" ref={fileInput} multiple onChange={handleFileChange}/>
         <img
           src={imageUrl}
           alt="Description of the image"
