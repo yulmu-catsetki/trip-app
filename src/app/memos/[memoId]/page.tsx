@@ -74,7 +74,7 @@ export default function Home() {
         const data = await response.json();
         setMemo(data.text);
         if (data.images && data.images.length > 0) {
-          const imageId = data.images[0]; // Get the first image ID
+          const imageId = data.images[0]; 
           setImageUrl(`https://hci-spring2024.vercel.app/image/${imageId}`); 
         }
       } catch (error) {
@@ -111,6 +111,8 @@ export default function Home() {
         for (let i = 0; i < files.length; i++) {
           formData.append('files', files[i]);
         }
+      }else{
+        formData.append('files',"[]");
       }
       const url = memoId === 'new' ? 'https://hci-spring2024.vercel.app/memo/create_memo' : `https://hci-spring2024.vercel.app/memo/update_memo/${memoId}`;
       const method = memoId === 'new' ? 'POST' : 'PUT';
@@ -122,7 +124,6 @@ export default function Home() {
         body: formData
       });
       if (!response.ok) {
-        const errorData = await response.json();
         throw new Error('Failed to save memo');
       }
       const data = await response.json();

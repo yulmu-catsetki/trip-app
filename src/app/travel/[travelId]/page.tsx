@@ -225,7 +225,8 @@ const TravelPage = () => {
                 image={memo.imageUrl}
                 showCheckbox={showCheckboxes}
                 onSelectionChange={handleMemoSelectionChange} 
-                isSelected={false}              
+                isSelected={false}     
+                travelId={travelId}         
                 />
             ))}
             {!showCheckboxes && (

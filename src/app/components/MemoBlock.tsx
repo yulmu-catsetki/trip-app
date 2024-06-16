@@ -6,6 +6,7 @@ import { useState } from 'react';
 
 type MemoBlockProps = {
   id: string;
+  travelId: string;
   memoText: string;
   image: string;
   showCheckbox: boolean;
@@ -13,14 +14,14 @@ type MemoBlockProps = {
   onSelectionChange: (id: string, isSelected: boolean) => void;
 };
 
-const MemoBlock: FC<MemoBlockProps> = ({ id, memoText, image, showCheckbox, onSelectionChange }) => {
+const MemoBlock: FC<MemoBlockProps> = ({ id, memoText, image, showCheckbox, travelId,onSelectionChange }) => {
   const router = useRouter();
   const [selected, setSelected] = useState(false);
 
   const [username, setUsername] = useState('j');
   const [password, setPassword] = useState('j');
   const handleClick = () => {
-    router.push(`/memos/${id}`);
+    router.push(`/memos/${id}?travelId=${travelId}`);
   };
   const handleCheckboxChange = () => {
     const newSelectedState = !selected;
