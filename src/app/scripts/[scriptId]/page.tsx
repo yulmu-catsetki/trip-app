@@ -128,7 +128,7 @@ export default function Home() {
       const script_content = [
         {
           "type": "text",
-          "content": content,
+          "text": content,
         },
       ];
       const tokenData = await tokenResponse.json();
