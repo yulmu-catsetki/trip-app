@@ -10,7 +10,7 @@ import Button from '@/app/components/utils/Button';
 const TravelPage = () => {
   const router = useRouter();
   const [memos, setMemos] = useState([]);
-  const [scripts, setScripts] = useState([]);
+  const [scripts, setScripts] = useState<{ id: string; title: string; updated_at: string }[]>([]);
   const [selectedMemos, setSelectedMemos] = useState([]);
 
   const [activeButton, setActiveButton] = useState('grid');
@@ -250,7 +250,9 @@ const TravelPage = () => {
       )}
       {activeButton === 'list' && (
         <div className="flex flex-col items-center justify-start gap-[30px] leading-[normal] tracking-[normal]">
-          {scripts.map((script: { id: string; title: string; updated_at: string }) => (
+          {scripts
+            .sort((a, b) => new Date(b.updated_at).getTime() - new Date(a.updated_at).getTime())
+            .map((script: { id: string; title: string; updated_at: string }) => (
             <ScriptBlock
               key={script.id}
               title={script.title}

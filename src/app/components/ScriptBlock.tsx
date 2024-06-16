@@ -1,5 +1,7 @@
 import { NextPage } from "next";
 import { useRouter } from 'next/navigation';
+import { formatDistanceToNow,addHours } from 'date-fns';
+import { ko } from 'date-fns/locale';
 
 export type ScriptBlockProps = {
   className?: string;
@@ -18,7 +20,8 @@ const ScriptBlock: NextPage<ScriptBlockProps> = ({
   travelId
 }) => {
   const router = useRouter();
-
+  const modifiedTimeAdjusted = addHours(new Date(modifiedTime), 9);
+  const modifiedTimeInMinutes = formatDistanceToNow(modifiedTimeAdjusted, { addSuffix: true, locale: ko });
   const handleClick = () => {
     router.push(`/scripts/${scriptId}?travelId=${travelId}`);
   };
@@ -72,7 +75,7 @@ const ScriptBlock: NextPage<ScriptBlockProps> = ({
         <div className="flex items-center mb-2">
           <h2 className="text-base font-semibold">{title}</h2>
         </div>
-        <p className="text-xs text-gray-500">최종 수정시간 <strong>{modifiedTime}</strong></p>
+        <p className="text-xs text-gray-500">최종 수정시간 <strong>{modifiedTimeInMinutes}</strong></p>
 
         <div className="flex items-center gap-2 mt-4 justify-end text-gray-800 ">
           <button onClick={handleClick} className="w-8 h-8 rounded-full bg-gray-800 text-white flex items-center justify-center focus:outline-none focus:ring-2 focus:ring-offset-2  focus:ring-black" aria-label="edit script" role="button">

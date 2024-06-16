@@ -1,6 +1,6 @@
 "use client"
 import React, { useState, useEffect } from 'react';
-import { usePathname, useRouter,useSearchParams} from 'next/navigation';
+import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import Button from '@/app/components/utils/Button';
 export default function Home() {
   const [showButton, setShowButton] = useState(true);
@@ -10,9 +10,8 @@ export default function Home() {
   const script_id = pathname.replace('/scripts/', '');
   const searchParams = useSearchParams();
   const travelId = searchParams.get('travelId');
-  const [title, setTitle] = useState("Blog Title Here");
-  const [date, setDate] = useState("Published on April 4, 2023");
-  const [content, setContent] = useState("Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla facilisi. Sed sit amet feugiat eros, eget eleifend dolor. Proin maximus bibendum felis, id fermentum odio vestibulum id. Sed ac ligula eget dolor consequat tincidunt. Nullam fringilla ipsum et ex lacinia, at bibendum elit posuere. Aliquam eget leo nec nibh mollis consectetur.");
+  const [title, setTitle] = useState("새 일기");
+  const [content, setContent] = useState(" ");
 
   const [username, setUsername] = useState('j');
   const [password, setPassword] = useState('j');
@@ -49,7 +48,6 @@ export default function Home() {
 
           const data = await response.json();
           setTitle(data.title);
-          setDate(data.created_at);
           setContent(data.content[0].text);
         }
       } catch (error) {
@@ -80,7 +78,7 @@ export default function Home() {
 
       const script = {
         title: title,
-        content: [{ "text": content,"type":"text" },],
+        content: [{ "text": content, "type": "text" },],
         travel_id: travelId,
       };
 
@@ -109,13 +107,13 @@ export default function Home() {
     } catch (error) {
       console.error(error);
     }
-      if (script_id === 'new') {
-        window.alert('script added successfully');
-      }
+    if (script_id === 'new') {
+      window.alert('script added successfully');
+    }
 
-      else {
-        window.alert('script updated successfully');
-      }
+    else {
+      window.alert('script updated successfully');
+    }
     router.back();
   };
   const handleAIAssistant = async () => {
@@ -149,10 +147,10 @@ export default function Home() {
       });
       console.log(script_content);
       if (!response.ok) {
-        
+
         throw new Error('Failed to activate AI assistant');
       }
-      
+
       const data = await response.json();
       console.log(data);
       setResponseData(data);
@@ -172,10 +170,7 @@ export default function Home() {
           </div>
           <div className="w-full flex flex-col px-4">
             <input className="text-4xl font-bold text-gray-800 mt-8 mb-8" value={title} onChange={e => setTitle(e.target.value)} />
-            <input className="text-gray-600" value={date} onChange={e => setDate(e.target.value)} />
-            <textarea className="h-max" value={content} onChange={e => setContent(e.target.value)} />
-
-
+            <textarea className="w-full h-64 bg-gray-50" value={content} onChange={e => setContent(e.target.value)} />
           </div>
           <div className="w-full md:w-1/4 px-4">
             {showButton && (
@@ -183,7 +178,7 @@ export default function Home() {
                 <h2 className="text-xl font-bold text-gray-800 mb-4">AI Assist</h2>
                 <Button
                   onClick={handleAIAssistant}
-                  label="Activate"
+                  label="추천 질문받기"
                 >
                 </Button>
                 {responseData && (
