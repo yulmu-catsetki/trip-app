@@ -10,7 +10,6 @@ export default function Home() {
   const scriptId = usePathname().replace('/scripts/', '');
   const travelId = searchParams.get('travelId');
   const [title, setTitle] = useState("새 일기");
-  const [textcontent, settextContent] = useState(" ");
   const [content, setContent] = useState<{
     text: string | number | readonly string[] | undefined;
     img: any; type: string 
@@ -170,18 +169,35 @@ export default function Home() {
             <input className="text-4xl font-bold text-gray-800 mt-8 mb-8" value={title} onChange={e => setTitle(e.target.value)} />
       
             <div>
-              {content.map((item, index) => {
-                if (item.type === "img") {
-                  return <img key={index} src={`https://hci-spring2024.vercel.app/image/${item.img}`} alt="" style={{ width: '200px', height: '200px', objectFit: 'cover' }}/>;
-                }else if (item.type === "text") {
-                  return (
-                    <div key={index}>
-                      <textarea id={`message${index}`}  class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" value={item.text} onChange={e => settextContent(e.target.value)} placeholder="Write your thoughts here..."></textarea>
-                    </div>
-                  );
-                }
-                return null;
-              })}
+              {content.length === 0 ? (
+                <div>
+                  <textarea
+                    className="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 "
+                    placeholder="Write your thoughts here..."
+                    onChange={e => setContent([{
+                      type: 'text', text: e.target.value,
+                      img: undefined
+                    }])}
+                  ></textarea>
+                </div>
+              ) : (
+                content.map((item, index) => {
+                  if (item.type === "img") {
+                    return <img key={index} src={`https://hci-spring2024.vercel.app/image/${item.img}`} alt="" style={{ width: '200px', height: '200px', objectFit: 'cover' }} />;
+                  } else if (item.type === "text") {
+                    return (
+                      <div key={index}>
+                        <textarea id={`message${index}`} className="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500" value={item.text} onChange={e => {
+                          const newContent = [...content];
+                          newContent[index].text = e.target.value;
+                          setContent(newContent);
+                        }} placeholder="Write your thoughts here..."></textarea>
+                      </div>
+                    );
+                  }
+                  return null;
+                })
+              )}
             </div>
           </div>
           <div className="w-full md:w-1/4 px-4">
@@ -195,10 +211,13 @@ export default function Home() {
                 {responseData && (
                   <div>
                     <ul>
-                      {(responseData as { questions: string[] }).questions.map((question, index) => (
-                        <div key={index} style={{ border: '1px solid black', margin: '10px', padding: '10px' }}>
-                        {question}
-                      </div>
+                    {(responseData as { questions: string[] }).questions.map((question, index) => (
+                <div key={index} className="flex items-start gap-2.5">
+              
+                  <div className="flex flex-col w-full leading-1.5 p-4 border-gray-200 bg-gray-700 rounded-e-xl rounded-es-xl m-4 ">
+                    <p className="text-sm font-normal py-2.5 text-gray-400 ">{question}</p>
+                  </div>
+                </div>
                       ))}
                     </ul>
                   </div>
