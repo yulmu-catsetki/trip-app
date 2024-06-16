@@ -1,6 +1,6 @@
 "use client"
 import React, { useState, useEffect } from 'react';
-import { usePathname, useRouter } from 'next/navigation';
+import { usePathname, useRouter,useSearchParams} from 'next/navigation';
 import Button from '@/app/components/utils/Button';
 export default function Home() {
   const [showButton, setShowButton] = useState(true);
@@ -8,6 +8,8 @@ export default function Home() {
   const router = useRouter();
   const pathname = usePathname();
   const script_id = pathname.replace('/scripts/', '');
+  const searchParams = useSearchParams();
+  const travelId = searchParams.get('travelId');
 
 
   const [title, setTitle] = useState("Blog Title Here");
@@ -82,7 +84,7 @@ export default function Home() {
       const script = {
         title: title,
         content: [{ "text": content,"type":"text" },],
-        travel_id: "665db1465147894c5b2073d5"
+        travel_id: travelId,
       };
 
       let url = 'https://hci-spring2024.vercel.app/script/create_script';
@@ -167,7 +169,9 @@ export default function Home() {
           <div className="w-full flex flex-col px-4">
             <input className="text-4xl font-bold text-gray-800 mt-8 mb-8" value={title} onChange={e => setTitle(e.target.value)} />
             <input className="text-gray-600" value={date} onChange={e => setDate(e.target.value)} />
-            <textarea className="" value={content} onChange={e => setContent(e.target.value)} />
+            <textarea className="h-max" value={content} onChange={e => setContent(e.target.value)} />
+
+
           </div>
           <div className="w-full md:w-1/4 px-4">
             {showButton && (
