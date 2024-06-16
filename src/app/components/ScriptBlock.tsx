@@ -6,6 +6,7 @@ export type ScriptBlockProps = {
   title: string;
   modifiedTime: string;
   scriptId: string;
+  travelId: string;
 };
 
 
@@ -14,17 +15,20 @@ const ScriptBlock: NextPage<ScriptBlockProps> = ({
   title,
   modifiedTime,
   scriptId,
+  travelId
 }) => {
   const router = useRouter();
 
   const handleClick = () => {
-    router.push(`/scripts/${scriptId}`);
+    router.push(`/scripts/${scriptId}?travelId=${travelId}`);
   };
 
   const handleDelete = () => {
     handleDeleteScript(scriptId);
   };
   async function handleDeleteScript(scriptId: string) {
+    if (window.confirm('Are you sure you want to delete this memo?')) {
+
     try {
       const tokenResponse = await fetch('https://hci-spring2024.vercel.app/user/token', {
         method: 'POST',
@@ -58,6 +62,7 @@ const ScriptBlock: NextPage<ScriptBlockProps> = ({
       console.error(error);
     }
   }
+}
 
   return (
     <div

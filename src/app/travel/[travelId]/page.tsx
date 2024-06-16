@@ -256,6 +256,7 @@ const TravelPage = () => {
               title={script.title}
               modifiedTime={script.updated_at}
               scriptId={script.id}
+              travelId={travelId} 
             />
           ))}
           <Button label="글 작성" onClick={handleAddScript} />

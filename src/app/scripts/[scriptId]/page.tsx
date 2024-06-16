@@ -10,12 +10,9 @@ export default function Home() {
   const script_id = pathname.replace('/scripts/', '');
   const searchParams = useSearchParams();
   const travelId = searchParams.get('travelId');
-
-
   const [title, setTitle] = useState("Blog Title Here");
   const [date, setDate] = useState("Published on April 4, 2023");
   const [content, setContent] = useState("Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla facilisi. Sed sit amet feugiat eros, eget eleifend dolor. Proin maximus bibendum felis, id fermentum odio vestibulum id. Sed ac ligula eget dolor consequat tincidunt. Nullam fringilla ipsum et ex lacinia, at bibendum elit posuere. Aliquam eget leo nec nibh mollis consectetur.");
-
 
   const [username, setUsername] = useState('j');
   const [password, setPassword] = useState('j');
@@ -112,6 +109,13 @@ export default function Home() {
     } catch (error) {
       console.error(error);
     }
+      if (script_id === 'new') {
+        window.alert('script added successfully');
+      }
+
+      else {
+        window.alert('script updated successfully');
+      }
     router.back();
   };
   const handleAIAssistant = async () => {
