@@ -27,6 +27,42 @@ const AddTrip = () => {
         router.push("/v1/showTripList")
         // todo : db 저장 처리하기 
     };
+    const fetchTravels = async () => {
+        try {
+  
+          const tokenResponse = await fetch('https://hci-spring2024.vercel.app/user/token', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/x-www-form-urlencoded'
+            },
+            body: `grant_type=password&username=${encodeURIComponent(username)}&password=${encodeURIComponent(password)}`
+          });
+  
+          if (!tokenResponse.ok) {
+            throw new Error('Failed to get token');
+          }
+  
+          const tokenData = await tokenResponse.json();
+          const token = tokenData.access_token;
+  
+  
+          const response = await fetch('https://hci-spring2024.vercel.app/travel/get_travels', {
+            headers: {
+              'Authorization': `Bearer ${token}`
+            }
+          });
+  
+          if (!response.ok) {
+            throw new Error('Failed to fetch travels');
+          }
+  
+          const data = await response.json();
+        } catch (error) {
+          console.error(error);
+
+        }
+      };
+
 
     const handleAddTrip = async () => {
         try {
@@ -64,8 +100,7 @@ const AddTrip = () => {
             if (!response.ok) {
                 throw new Error('Failed to save trip');
             }
-
-            // Navigate to trip list after successful save
+            fetchTravels();
             router.push("/v1/showTripList");
         } catch (error) {
             console.error(error);

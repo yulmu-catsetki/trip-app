@@ -215,7 +215,7 @@ const TravelPage = () => {
       </div>
       {activeButton === 'grid' && (
         <div className="flex flex-col items-center justify-start gap-[30px] leading-[normal] tracking-[normal]">
-          <div className="flex grid grid-cols-2 gap-4">
+          <div className="flex max-w-screen-sm min-w-full grid grid-cols-2 gap-4">
             {memos.map((memo: { id: string; text: string; imageUrl: string }) => (
         
               <MemoBlock
