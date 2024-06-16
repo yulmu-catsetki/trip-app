@@ -121,7 +121,7 @@ const TravelPage = () => {
   }
 
   function handleAddScript() {
-    router.push(`/scripts/new?travelId=${travelId}`);
+    router.push(`/scripts/new&travelId=${travelId}`);
   }
   async function handleCreatePost() {
     try {
@@ -177,7 +177,7 @@ const TravelPage = () => {
       const scriptData = await response.json();
   
       // Navigate to the script page
-      router.push(`/scripts/${scriptData.id}`);
+      router.push(`/scripts/${scriptData.id}?travelId=${travelId}`);
     } catch (error) {
       console.error(error);
     }

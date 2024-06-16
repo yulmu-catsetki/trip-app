@@ -4,11 +4,10 @@ import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import Button from '@/app/components/utils/Button';
 export default function Home() {
   const [showButton, setShowButton] = useState(true);
-
   const router = useRouter();
-  const pathname = usePathname();
-  const script_id = pathname.replace('/scripts/', '');
+
   const searchParams = useSearchParams();
+  const scriptId = usePathname().replace('/scripts/', '');
   const travelId = searchParams.get('travelId');
   const [title, setTitle] = useState("새 일기");
   const [textcontent, settextContent] = useState(" ");
@@ -20,7 +19,7 @@ export default function Home() {
   const [password, setPassword] = useState('j');
   const [token, setToken] = useState('');
   const [responseData, setResponseData] = useState(null);
-  
+
   useEffect(() => {
     const fetchScript = async () => {
       try {
@@ -37,8 +36,8 @@ export default function Home() {
         }
         const tokenData = await tokenResponse.json();
         const token = tokenData.access_token;
-        if (script_id != "new") {
-          const response = await fetch(`https://hci-spring2024.vercel.app/script/get_script/${script_id}`, {
+        if (scriptId != "new") {
+          const response = await fetch(`https://hci-spring2024.vercel.app/script/get_script/${scriptId}`, {
             method: 'GET',
             headers: {
               'Authorization': `Bearer ${token}`,
@@ -49,12 +48,10 @@ export default function Home() {
           if (!response.ok) {
             throw new Error('Failed to fetch script');
           }
-
           const data = await response.json();
-
           setTitle(data.title);
-          settextContent(data.content[0].text);
           setContent(data.content);
+          console.log(data.content);
         }
       } catch (error) {
         console.error(error);
@@ -62,7 +59,7 @@ export default function Home() {
     };
 
     fetchScript();
-  }, [script_id, username, password]);
+  }, [scriptId, username, password]);
 
   const handleScript = async () => {
     try {
@@ -84,15 +81,15 @@ export default function Home() {
 
       const script = {
         title: title,
-        content: [{ "text": textcontent, "type": "text" },],
+        content: content,
         travel_id: travelId,
       };
 
       let url = 'https://hci-spring2024.vercel.app/script/create_script';
       let method = 'POST';
 
-      if (script_id != "new") {
-        url = `https://hci-spring2024.vercel.app/script/update_script/${script_id}`;
+      if (scriptId != "new") {
+        url = `https://hci-spring2024.vercel.app/script/update_script/${scriptId}`;
         method = 'PUT';
       }
 
@@ -113,7 +110,7 @@ export default function Home() {
     } catch (error) {
       console.error(error);
     }
-    if (script_id === 'new') {
+    if (scriptId === 'new') {
       window.alert('script added successfully');
     }
 
@@ -138,7 +135,7 @@ export default function Home() {
       const script_content = content;
       const tokenData = await tokenResponse.json();
       const token = tokenData.access_token;
-      const response = await fetch(`https://hci-spring2024.vercel.app/assistant/create_message/${script_id}`, {
+      const response = await fetch(`https://hci-spring2024.vercel.app/assistant/create_message/${scriptId}`, {
         method: 'POST',
         headers: {
           'Authorization': `Bearer ${token}`,
@@ -177,7 +174,11 @@ export default function Home() {
                 if (item.type === "img") {
                   return <img key={index} src={`https://hci-spring2024.vercel.app/image/${item.img}`} alt="" style={{ width: '200px', height: '200px', objectFit: 'cover' }}/>;
                 }else if (item.type === "text") {
-                  return <textarea className="w-full h-32 bg-gray-50" key={index} value={item.text} onChange={e => settextContent(e.target.value)} />;
+                  return (
+                    <div key={index}>
+                      <textarea id={`message${index}`}  class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" value={item.text} onChange={e => settextContent(e.target.value)} placeholder="Write your thoughts here..."></textarea>
+                    </div>
+                  );
                 }
                 return null;
               })}
@@ -186,7 +187,6 @@ export default function Home() {
           <div className="w-full md:w-1/4 px-4">
             {showButton && (
               <div className="bg-gray-100 p-4 mt-4">
-                <h2 className="text-xl font-bold text-gray-800 mb-4">AI Assist</h2>
                 <Button
                   onClick={handleAIAssistant}
                   label="추천 질문받기"
@@ -194,10 +194,11 @@ export default function Home() {
                 </Button>
                 {responseData && (
                   <div>
-                    <h2>Questions:</h2>
                     <ul>
                       {(responseData as { questions: string[] }).questions.map((question, index) => (
-                        <li key={index}>{question}</li>
+                        <div key={index} style={{ border: '1px solid black', margin: '10px', padding: '10px' }}>
+                        {question}
+                      </div>
                       ))}
                     </ul>
                   </div>
