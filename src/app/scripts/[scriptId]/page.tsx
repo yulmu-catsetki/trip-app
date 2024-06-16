@@ -2,6 +2,7 @@
 import React, { useState, useEffect } from 'react';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import Button from '@/app/components/utils/Button';
+
 export default function Home() {
   const [showButton, setShowButton] = useState(true);
   const router = useRouter();
@@ -214,7 +215,7 @@ export default function Home() {
                     {(responseData as { questions: string[] }).questions.map((question, index) => (
                 <div key={index} className="flex items-start gap-2.5">
               
-                  <div className="flex flex-col w-full leading-1.5 p-4 border-gray-200 bg-gray-700 rounded-e-xl rounded-es-xl m-4 ">
+                  <div className="flex flex-col w-full p-4 border-gray-200 bg-gray-700 rounded-e-xl rounded-es-xl m-4 ">
                     <p className="text-sm font-normal py-2.5 text-gray-400 ">{question}</p>
                   </div>
                 </div>
