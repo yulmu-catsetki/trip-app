@@ -13,6 +13,7 @@ export default function Home() {
   const [title, setTitle] = useState("새 일기");
   const [textcontent, settextContent] = useState(" ");
   const [content, setContent] = useState<{
+    text: string | number | readonly string[] | undefined;
     img: any; type: string 
 }[]>([]);
   const [username, setUsername] = useState('j');
@@ -134,12 +135,7 @@ export default function Home() {
       if (!tokenResponse.ok) {
         throw new Error('Failed to get token');
       }
-      const script_content = [
-        {
-          "type": "text",
-          "text": content,
-        },
-      ];
+      const script_content = content;
       const tokenData = await tokenResponse.json();
       const token = tokenData.access_token;
       const response = await fetch(`https://hci-spring2024.vercel.app/assistant/create_message/${script_id}`, {
@@ -175,12 +171,14 @@ export default function Home() {
           </div>
           <div className="w-full flex flex-col px-4">
             <input className="text-4xl font-bold text-gray-800 mt-8 mb-8" value={title} onChange={e => setTitle(e.target.value)} />
-            <textarea className="w-full h-64 bg-gray-50" value={textcontent} onChange={e => settextContent(e.target.value)} />
+      
             <div>
               {content.map((item, index) => {
                 if (item.type === "img") {
-                  return <img key={index} src={`https://hci-spring2024.vercel.app/image/${item.img}`} alt="" style={{ width: '200px', height: '200px', objectFit: 'cover',gap:'4px' }}/>;
-                } 
+                  return <img key={index} src={`https://hci-spring2024.vercel.app/image/${item.img}`} alt="" style={{ width: '200px', height: '200px', objectFit: 'cover' }}/>;
+                }else if (item.type === "text") {
+                  return <textarea className="w-full h-32 bg-gray-50" key={index} value={item.text} onChange={e => settextContent(e.target.value)} />;
+                }
                 return null;
               })}
             </div>

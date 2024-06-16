@@ -127,12 +127,19 @@ const TravelPage = () => {
     try {
       const selectedMemoTexts = memos
       .filter((memo: { id: string }) => selectedMemos[memo.id as unknown as number])
-        .map((memo: { text: string }) => memo.text)
-        .join('\n');
+        .map((memo: { text: string }) => memo.text);
       const selectedMemoImages = memos
         .filter((memo: { id: string }) => selectedMemos[memo.id as unknown as number])
         .flatMap((memo: { images: string[] }) => memo.images);
-
+      let content = [];
+      for (let i = 0; i < Math.max(selectedMemoTexts.length, selectedMemoImages.length); i++) {
+        if (i < selectedMemoImages.length) {
+          content.push({ "img": selectedMemoImages[i], "type": "img" });
+        }
+        if (i < selectedMemoTexts.length) {
+          content.push({ "text": selectedMemoTexts[i], "type": "text" });
+        }
+      }
       // Fetch the token
       const tokenResponse = await fetch('https://hci-spring2024.vercel.app/user/token', {
         method: 'POST',
@@ -157,8 +164,8 @@ const TravelPage = () => {
           'Content-Type': 'application/json'
         },
         body: JSON.stringify({
-          title: 'New Script from Selected Memos',
-          content: [{ "text": selectedMemoTexts,"type":"text" },...selectedMemoImages.map(image => ({ "img": image, "type":"img" })),],
+          title: '새 일기',
+          content: content,
           travel_id: travelId,
         }),
       });
