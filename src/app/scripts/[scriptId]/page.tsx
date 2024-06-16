@@ -11,12 +11,15 @@ export default function Home() {
   const searchParams = useSearchParams();
   const travelId = searchParams.get('travelId');
   const [title, setTitle] = useState("새 일기");
-  const [content, setContent] = useState(" ");
-
+  const [textcontent, settextContent] = useState(" ");
+  const [content, setContent] = useState<{
+    img: any; type: string 
+}[]>([]);
   const [username, setUsername] = useState('j');
   const [password, setPassword] = useState('j');
   const [token, setToken] = useState('');
   const [responseData, setResponseData] = useState(null);
+  
   useEffect(() => {
     const fetchScript = async () => {
       try {
@@ -47,8 +50,10 @@ export default function Home() {
           }
 
           const data = await response.json();
+
           setTitle(data.title);
-          setContent(data.content[0].text);
+          settextContent(data.content[0].text);
+          setContent(data.content);
         }
       } catch (error) {
         console.error(error);
@@ -78,7 +83,7 @@ export default function Home() {
 
       const script = {
         title: title,
-        content: [{ "text": content, "type": "text" },],
+        content: [{ "text": textcontent, "type": "text" },],
         travel_id: travelId,
       };
 
@@ -170,7 +175,15 @@ export default function Home() {
           </div>
           <div className="w-full flex flex-col px-4">
             <input className="text-4xl font-bold text-gray-800 mt-8 mb-8" value={title} onChange={e => setTitle(e.target.value)} />
-            <textarea className="w-full h-64 bg-gray-50" value={content} onChange={e => setContent(e.target.value)} />
+            <textarea className="w-full h-64 bg-gray-50" value={textcontent} onChange={e => settextContent(e.target.value)} />
+            <div>
+              {content.map((item, index) => {
+                if (item.type === "img") {
+                  return <img key={index} src={`https://hci-spring2024.vercel.app/image/${item.img}`} alt="" style={{ width: '200px', height: '200px', objectFit: 'cover',gap:'4px' }}/>;
+                } 
+                return null;
+              })}
+            </div>
           </div>
           <div className="w-full md:w-1/4 px-4">
             {showButton && (

@@ -127,9 +127,11 @@ const TravelPage = () => {
     try {
       const selectedMemoTexts = memos
       .filter((memo: { id: string }) => selectedMemos[memo.id as unknown as number])
-      .map((memo: { text: string }) => memo.text)
-      .join('\n');
-      console.log(selectedMemoTexts);
+        .map((memo: { text: string }) => memo.text)
+        .join('\n');
+      const selectedMemoImages = memos
+        .filter((memo: { id: string }) => selectedMemos[memo.id as unknown as number])
+        .flatMap((memo: { images: string[] }) => memo.images);
 
       // Fetch the token
       const tokenResponse = await fetch('https://hci-spring2024.vercel.app/user/token', {
@@ -156,7 +158,7 @@ const TravelPage = () => {
         },
         body: JSON.stringify({
           title: 'New Script from Selected Memos',
-          content: [{ "text": selectedMemoTexts,"type":"text" },],
+          content: [{ "text": selectedMemoTexts,"type":"text" },...selectedMemoImages.map(image => ({ "img": image, "type":"img" })),],
           travel_id: travelId,
         }),
       });
