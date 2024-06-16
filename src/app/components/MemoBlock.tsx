@@ -55,6 +55,7 @@ const MemoBlock: FC<MemoBlockProps> = ({ id, memoText, image, showCheckbox, onSe
       if (!response.ok) {
         throw new Error('Failed to delete memo');
       }
+      window.location.reload();
   
     } catch (error) {
       console.error(error);
