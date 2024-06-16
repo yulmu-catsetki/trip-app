@@ -133,6 +133,15 @@ export default function Home() {
       }
       const data = await response.json();
       console.log(data);
+      // After saving a new memo
+      if (memoId === 'new') {
+        window.alert('Memo added successfully');
+      }
+
+      // After updating an existing memo
+      else {
+        window.alert('Memo updated successfully');
+      }
     } catch (error) {
       console.error(error);
     }
